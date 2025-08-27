@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Thiht/go-command"
+	"github.com/pix-xip/go-command"
 )
 
 type stringList []string

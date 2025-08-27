@@ -4,8 +4,8 @@ import (
 	"context"
 	"flag"
 
-	"github.com/Thiht/go-command"
-	"github.com/Thiht/go-command/examples/github/handlers"
+	"github.com/pix-xip/go-command"
+	"github.com/pix-xip/go-command/examples/github/handlers"
 	"github.com/google/go-github/v56/github"
 )
 

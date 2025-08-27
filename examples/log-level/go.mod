@@ -1,7 +1,7 @@
-module github.com/Thiht/go-command/examples/log-level
+module github.com/pix-xip/go-command/examples/log-level
 
 go 1.23.4
 
-require github.com/Thiht/go-command v0.0.0
+require github.com/pix-xip/go-command v0.0.0
 
-replace github.com/Thiht/go-command => ../..
+replace github.com/pix-xip/go-command => ../..

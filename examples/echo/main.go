@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/Thiht/go-command"
+	"github.com/pix-xip/go-command"
 )
 
 func main() {

@@ -1,3 +1,3 @@
-module github.com/Thiht/go-command
+module github.com/pix-xip/go-command
 
-go 1.18
+go 1.25

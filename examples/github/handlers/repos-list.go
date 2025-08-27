@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/Thiht/go-command"
+	"github.com/pix-xip/go-command"
 	"github.com/google/go-github/v56/github"
 )
 
