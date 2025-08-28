@@ -5,12 +5,13 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"slices"
 	"strings"
 )
 
 // Handler represents a command function called by [Command.Execute].
 // The command flags can be accessed from the FlagSet parameter using [Lookup] or [flag.Lookup].
-type Handler func(context.Context, *flag.FlagSet, []string) int
+type Handler func(context.Context, *flag.FlagSet, []string) error
 
 // Middleware represents a function used to wrap a [Handler]. They can be used to make actions that will execute before or after the command.
 // They are also inherited by subcommands, unlike command actions.
@@ -28,7 +29,7 @@ type Command interface {
 	Action(Handler) Command
 
 	// Execute runs the command using [os.Args]. It should normally be called on the root command.
-	Execute(context.Context)
+	Execute(context.Context) error
 
 	// Help sets the help message of a command.
 	Help(string) Command
@@ -83,9 +84,9 @@ func (c *command) Action(handler Handler) Command {
 	return c
 }
 
-func (c *command) Execute(ctx context.Context) {
+func (c *command) Execute(ctx context.Context) error {
 	command, args := c, os.Args[1:]
-	middlewares := append([]Middleware{}, c.middlewares...)
+	middlewares := slices.Clone(c.middlewares)
 	for {
 		if err := command.flagSet.Parse(args); err != nil {
 			// This should never occur because the flag sets use flag.ExitOnError
@@ -128,7 +129,7 @@ func (c *command) Execute(ctx context.Context) {
 		handler = middlewares[i](handler)
 	}
 
-	os.Exit(handler(ctx, command.flagSet, args))
+	return handler(ctx, command.flagSet, args)
 }
 
 func (c *command) Help(help string) Command {

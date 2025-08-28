@@ -4,24 +4,21 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	"log"
 
-	"github.com/pix-xip/go-command"
 	"github.com/google/go-github/v56/github"
+	"github.com/pix-xip/go-command"
 )
 
 func ReposListHandler(ghClient *github.Client) command.Handler {
-	return func(ctx context.Context, flagSet *flag.FlagSet, _ []string) int {
+	return func(ctx context.Context, flagSet *flag.FlagSet, _ []string) error {
 		user := command.Lookup[string](flagSet, "user")
 		if user == "" {
-			log.Printf("missing required flag: user")
-			return 1
+			return fmt.Errorf("missing required flag: user")
 		}
 
 		repos, _, err := ghClient.Repositories.List(ctx, user, nil)
 		if err != nil {
-			log.Printf("failed to list repositories: %v", err)
-			return 1
+			return fmt.Errorf("failed to list repositories: %v", err)
 		}
 
 		fmt.Printf("Repositories of %s:\n", user)
@@ -29,6 +26,6 @@ func ReposListHandler(ghClient *github.Client) command.Handler {
 			fmt.Printf("- %s\n", *repo.Name)
 		}
 
-		return 0
+		return nil
 	}
 }

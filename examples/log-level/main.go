@@ -22,7 +22,7 @@ func main() {
 }
 
 func LevelMiddleware(next command.Handler) command.Handler {
-	return func(ctx context.Context, flagSet *flag.FlagSet, args []string) int {
+	return func(ctx context.Context, flagSet *flag.FlagSet, args []string) error {
 		switch level := command.Lookup[string](flagSet, "level"); level {
 		case "debug":
 			slog.SetLogLoggerLevel(slog.LevelDebug)
@@ -37,20 +37,19 @@ func LevelMiddleware(next command.Handler) command.Handler {
 			slog.SetLogLoggerLevel(slog.LevelError)
 
 		default:
-			fmt.Println("Unknown level")
-			return 1
+			return fmt.Errorf("unknown level: %s", level)
 		}
 
 		return next(ctx, flagSet, args)
 	}
 }
 
-func InfoHandler(ctx context.Context, _ *flag.FlagSet, args []string) int {
+func InfoHandler(ctx context.Context, _ *flag.FlagSet, args []string) error {
 	slog.InfoContext(ctx, strings.Join(args, " "))
-	return 0
+	return nil
 }
 
-func ErrorHandler(ctx context.Context, _ *flag.FlagSet, args []string) int {
+func ErrorHandler(ctx context.Context, _ *flag.FlagSet, args []string) error {
 	slog.ErrorContext(ctx, strings.Join(args, " "))
-	return 0
+	return nil
 }

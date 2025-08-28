@@ -21,7 +21,7 @@ func main() {
 	root.Execute(context.Background())
 }
 
-func EchoHandler(ctx context.Context, flagSet *flag.FlagSet, args []string) int {
+func EchoHandler(ctx context.Context, flagSet *flag.FlagSet, args []string) error {
 	verbose := command.Lookup[bool](flagSet, "verbose")
 	textCase := command.Lookup[string](flagSet, "case")
 
@@ -40,5 +40,5 @@ func EchoHandler(ctx context.Context, flagSet *flag.FlagSet, args []string) int 
 		fmt.Println(strings.Join(args, " "))
 	}
 
-	return 0
+	return nil
 }
