@@ -18,7 +18,9 @@ func main() {
 		flagSet.String("case", "", "Case to use (upper, lower)")
 	})
 
-	root.Execute(context.Background())
+	if err := root.Execute(context.Background()); err != nil {
+		panic(err)
+	}
 }
 
 func EchoHandler(ctx context.Context, flagSet *flag.FlagSet, args []string) error {

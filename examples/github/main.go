@@ -4,9 +4,9 @@ import (
 	"context"
 	"flag"
 
+	"github.com/google/go-github/v56/github"
 	"github.com/pix-xip/go-command"
 	"github.com/pix-xip/go-command/examples/github/handlers"
-	"github.com/google/go-github/v56/github"
 )
 
 func main() {
@@ -23,5 +23,7 @@ func main() {
 		}).Help("List repositories of a GitHub user")
 	}
 
-	root.Execute(context.Background())
+	if err := root.Execute(context.Background()); err != nil {
+		panic(err)
+	}
 }

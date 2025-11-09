@@ -4,6 +4,7 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"log"
 	"log/slog"
 	"strings"
 
@@ -18,7 +19,9 @@ func main() {
 	root.SubCommand("info").Action(InfoHandler)
 	root.SubCommand("error").Action(ErrorHandler)
 
-	root.Execute(context.Background())
+	if err := root.Execute(context.Background()); err != nil {
+		log.Fatal(err)
+	}
 }
 
 func LevelMiddleware(next command.Handler) command.Handler {
