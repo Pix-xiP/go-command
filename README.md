@@ -26,10 +26,9 @@ go-command is **not** a framework, so here's where it **won't** help you:
 
 ## Why this library?
 
-1. I wanted to do subcommands with just the standard library but found it hard to do; this is an attempt at making it easier with minimal abstractions
-2. I wanted to declare my subcommands in the same way as [net/http.HandleFunc](https://pkg.go.dev/net/http#HandleFunc)
-3. I wanted a simpler alternative to [spf13/cobra](https://github.com/spf13/cobra) and [urfave/cli](https://github.com/urfave/cli)
-   - go-command doesn't aim at being as full-featured as these
+I forked [Thiht/go-command](https://github.com/Thiht/go-command) because I wanted the handler to also be able to return an error instead of failing with an integer code.
+
+All credit to the them for the original work.
 
 ## How to use?
 
