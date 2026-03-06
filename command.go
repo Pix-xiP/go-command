@@ -115,7 +115,9 @@ func (c *command) Execute(ctx context.Context) error {
 	if command.handler == nil {
 		if len(args) > 0 {
 			command.flagSet.SetOutput(os.Stderr)
-			fmt.Fprintf(command.flagSet.Output(), "command provided but not defined: %s\n", args[0])
+			if _, err := fmt.Fprintf(command.flagSet.Output(), "command provided but not defined: %s\n", args[0]); err != nil {
+				panic(err)
+			}
 			command.usage()
 			os.Exit(2) // Use 2 to mimick the behavior of flag.ExitOnError
 		}
@@ -170,7 +172,8 @@ func (c *command) usage() {
 		}
 	}
 
-	builder.WriteString("Usage: ")
+	builder.WriteString(bold("Usage:"))
+	builder.WriteString(" ")
 	builder.WriteString(strings.Join(fullCommand, " "))
 	builder.WriteString(optionsHint)
 	builder.WriteString(subCommandHint)
@@ -184,23 +187,25 @@ func (c *command) usage() {
 
 	if nbFlags > 0 {
 		builder.WriteString("\n")
-		builder.WriteString("Options:\n")
-		c.flagSet.PrintDefaults()
+		builder.WriteString(bold("Options:"))
+		builder.WriteString("\n")
+		c.flagSet.VisitAll(func(f *flag.Flag) {
+			builder.WriteString(formatFlag(f))
+			builder.WriteString("\n")
+		})
 	}
 
 	if len(c.subCommands) > 0 {
 		builder.WriteString("\n")
-		builder.WriteString("Subcommands:")
+		builder.WriteString(bold("Subcommands:"))
 
 		for name, subCommand := range c.subCommands {
-			builder.WriteString("\n  ")
-			builder.WriteString(name)
-			if subCommand.help != "" {
-				builder.WriteString("\n\t")
-				builder.WriteString(subCommand.help)
-			}
+			builder.WriteString("\n")
+			builder.WriteString(formatSubcommand(name, subCommand.help))
 		}
 	}
 
-	fmt.Fprintln(output, builder.String())
+	if _, err := fmt.Fprintln(output, builder.String()); err != nil {
+		panic(err)
+	}
 }
